@@ -1,4 +1,7 @@
 {
+  "description": "AI Fitness Mirror - Trained Models",
+  "version": "1.0",
+  "date_created": "2026-01-30T11:37:38.292563",
   "classes": [
     "hip thrusts",
     "jumping jacks",
@@ -8,38 +11,74 @@
     "squats"
   ],
   "num_classes": 6,
-  "input_shape": 51,
   "num_keypoints": 17,
+  "keypoint_features": 3,
+  "input_keypoints_shape": 51,
   "class_reconstruction_errors": {
     "hip thrusts": {
-      "mean": 0.004268541221591691,
-      "std": 0.0016434646749224843,
-      "threshold": 0.00755547057143666
+      "mean": 0.004394817747211495,
+      "std": 0.0017421183841191802,
+      "threshold": 0.007879054515449855
     },
     "jumping jacks": {
-      "mean": 0.003967356984935619,
-      "std": 0.002264815556541539,
-      "threshold": 0.008496988098018698
+      "mean": 0.004099266174195794,
+      "std": 0.002328283909005127,
+      "threshold": 0.008755833992206048
     },
     "lunges": {
-      "mean": 0.004368354866292232,
-      "std": 0.0018309643207333748,
-      "threshold": 0.008030283507758982
+      "mean": 0.004301503260922677,
+      "std": 0.001810587267910541,
+      "threshold": 0.007922677796743759
     },
     "pullups": {
-      "mean": 0.0046142077390612735,
-      "std": 0.002501622837698941,
-      "threshold": 0.009617453414459156
+      "mean": 0.004841215914090702,
+      "std": 0.0026614465023596066,
+      "threshold": 0.010164108918809915
     },
     "pushups": {
-      "mean": 0.003959580165606501,
-      "std": 0.001964840933427148,
-      "threshold": 0.007889262032460796
+      "mean": 0.004344228469171481,
+      "std": 0.0024624524487889344,
+      "threshold": 0.009269133366749348
     },
     "squats": {
-      "mean": 0.0037537586119750508,
-      "std": 0.0018787283441270924,
-      "threshold": 0.0075112153002292355
+      "mean": 0.003862195861108926,
+      "std": 0.0019943449662064867,
+      "threshold": 0.0078508857935219
+    }
+  },
+  "models": {
+    "activity_classifier": "activity_classifier.keras",
+    "correctness_assessor": "correctness_assessor.keras",
+    "movenet": "Load from TF Hub: https://tfhub.dev/google/movenet/singlepose/lightning/4"
+  },
+  "usage": {
+    "load_models": {
+      "activity_classifier": "keras.models.load_model(\"activity_classifier.keras\")",
+      "correctness_assessor": "keras.models.load_model(\"correctness_assessor.keras\")",
+      "movenet": "hub.load(\"https://tfhub.dev/google/movenet/singlepose/lightning/4\").signatures[\"serving_default\"]"
+    },
+    "input_image": "RGB image (height, width, 3) - will be resized to 192x192 by MoveNet",
+    "keypoints_shape": "(51,) - 17 keypoints \u00d7 3 features (x, y, confidence)",
+    "activity_classifier_output": "Class probabilities (num_classes,)",
+    "correctness_assessor_input": "[keypoints, class_one_hot]",
+    "correctness_assessor_output": "Reconstructed keypoints - compare MSE for form quality"
+  },
+  "tflite_model": {
+    "filename": "combined_fitness_model.tflite",
+    "size_kb": "9540.94",
+    "input": "RGB image (1, 192, 192, 3) as uint8",
+    "outputs": {
+      "keypoints": "Flattened keypoints (1, 51) as float32",
+      "activity_probs": "Activity class probabilities (1, num_classes) as float32",
+      "predicted_class": "Predicted activity class index (1,) as int64",
+      "reconstruction_error": "Form quality MSE (1,) as float32 - lower is better"
+    },
+    "requirements": "TensorFlow Lite with Flex delegate support",
+    "deployment": {
+      "python": "Use tf.lite.Interpreter with experimental.load_delegate for Flex ops",
+      "android": "Include TensorFlow Lite Flex delegate in your app",
+      "ios": "Include TensorFlow Lite with Select TF Ops",
+      "note": "Flex ops increase model size but enable full TensorFlow op support"
     }
   }
 }

@@ -2,7 +2,7 @@
   "info": {
     "description": "AI Fitness Mirror - Pose Keypoints Dataset",
     "version": "1.0",
-    "date_created": "2026-01-29T18:33:16.102574",
+    "date_created": "2026-01-30T11:22:27.938425",
     "num_keypoints": 17,
     "keypoint_format": "MediaPipe Pose (33 landmarks with x, y, z, visibility)"
   },
