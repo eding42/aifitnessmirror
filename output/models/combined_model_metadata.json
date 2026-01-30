@@ -1,0 +1,80 @@
+{
+  "model_name": "AI Fitness Mirror - Combined End-to-End Model",
+  "version": "1.0",
+  "quantization": "int8",
+  "input": {
+    "shape": [
+      1,
+      192,
+      192,
+      3
+    ],
+    "dtype": "int32",
+    "description": "RGB image resized to 192x192"
+  },
+  "outputs": {
+    "keypoints": {
+      "shape": [
+        1,
+        51
+      ],
+      "description": "17 keypoints with x, y, confidence"
+    },
+    "activity_probabilities": {
+      "shape": [
+        1,
+        6
+      ],
+      "description": "Probability distribution over activity classes"
+    },
+    "predicted_class": {
+      "description": "Index of predicted activity class"
+    },
+    "confidence": {
+      "description": "Confidence of predicted class (0-1)"
+    },
+    "reconstruction_error": {
+      "description": "Form quality metric (lower = better form)"
+    }
+  },
+  "classes": [
+    "hip thrusts",
+    "jumping jacks",
+    "lunges",
+    "pullups",
+    "pushups",
+    "squats"
+  ],
+  "class_reconstruction_thresholds": {
+    "hip thrusts": {
+      "mean": 0.004268541221591691,
+      "std": 0.0016434646749224843,
+      "threshold": 0.00755547057143666
+    },
+    "jumping jacks": {
+      "mean": 0.003967356984935619,
+      "std": 0.002264815556541539,
+      "threshold": 0.008496988098018698
+    },
+    "lunges": {
+      "mean": 0.004368354866292232,
+      "std": 0.0018309643207333748,
+      "threshold": 0.008030283507758982
+    },
+    "pullups": {
+      "mean": 0.0046142077390612735,
+      "std": 0.002501622837698941,
+      "threshold": 0.009617453414459156
+    },
+    "pushups": {
+      "mean": 0.003959580165606501,
+      "std": 0.001964840933427148,
+      "threshold": 0.007889262032460796
+    },
+    "squats": {
+      "mean": 0.0037537586119750508,
+      "std": 0.0018787283441270924,
+      "threshold": 0.0075112153002292355
+    }
+  }
+}
