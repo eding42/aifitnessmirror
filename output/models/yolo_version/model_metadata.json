@@ -1,0 +1,101 @@
+{
+  "model_info": {
+    "name": "AI Fitness Mirror - Combined Model",
+    "version": "1.0",
+    "created": "2026-01-31T17:15:36.345451",
+    "framework": "PyTorch + Ultralytics YOLO",
+    "format": "ONNX",
+    "opset_version": 12
+  },
+  "models": {
+    "yolo_pose": {
+      "file": "yolov8n-pose.onnx",
+      "type": "pose_estimation",
+      "input": "image (640, 640, 3)",
+      "output": "keypoints (17 \u00d7 3)",
+      "description": "YOLO v8 Nano Pose - extracts 17 COCO keypoints from images"
+    },
+    "combined": {
+      "file": "fitness_mirror_combined.onnx",
+      "type": "classification_and_assessment",
+      "input": "keypoints (51,)",
+      "outputs": {
+        "predicted_class": "INT64 - activity class index",
+        "confidence": "FLOAT - prediction confidence",
+        "form_error": "FLOAT - reconstruction error (MSE)",
+        "class_probs": "FLOAT[6] - all class probabilities",
+        "reconstructed": "FLOAT[51] - reconstructed keypoints"
+      },
+      "description": "Combined activity classification and form assessment"
+    }
+  },
+  "classes": {
+    "names": [
+      "hip thrusts",
+      "jumping jacks",
+      "lunges",
+      "pullups",
+      "pushups",
+      "squats"
+    ],
+    "count": 6,
+    "encoding": "label_encoder"
+  },
+  "input_features": {
+    "num_keypoints": 17,
+    "features_per_keypoint": 3,
+    "total_features": 51,
+    "format": "flattened [x1, y1, conf1, x2, y2, conf2, ..., x17, y17, conf17]",
+    "normalization": "x and y normalized to [0, 1], confidence in [0, 1]"
+  },
+  "reconstruction_thresholds": {
+    "hip thrusts": {
+      "mean": 0.0028135122265666723,
+      "std": 0.002425344195216894,
+      "threshold": 0.007664200617000461
+    },
+    "jumping jacks": {
+      "mean": 0.0024489606730639935,
+      "std": 0.003897392190992832,
+      "threshold": 0.010243745055049658
+    },
+    "lunges": {
+      "mean": 0.002522579161450267,
+      "std": 0.0019466185476630926,
+      "threshold": 0.006415816256776452
+    },
+    "pullups": {
+      "mean": 0.003959507215768099,
+      "std": 0.0034015984274446964,
+      "threshold": 0.010762704070657492
+    },
+    "pushups": {
+      "mean": 0.0031712304335087538,
+      "std": 0.003301749937236309,
+      "threshold": 0.009774730307981372
+    },
+    "squats": {
+      "mean": 0.0022204164415597916,
+      "std": 0.0014285672223195434,
+      "threshold": 0.005077550886198878
+    }
+  },
+  "deployment": {
+    "pipeline": [
+      "1. Input image (any size)",
+      "2. YOLO v8 Pose: image \u2192 keypoints (17 \u00d7 3)",
+      "3. Normalize keypoints: x/width, y/height",
+      "4. Flatten keypoints: (17, 3) \u2192 (51,)",
+      "5. Combined Model: keypoints \u2192 [class, confidence, form_error, probs]",
+      "6. Calculate form_quality: 100 * (1 - error/threshold)"
+    ],
+    "tflite_conversion": "Use tflitequantizer.ipynb to convert ONNX to TFLite",
+    "edge_deployment": "Suitable for Nuvoton M55 or similar ARM Cortex-M devices"
+  },
+  "performance": {
+    "training_accuracy": 0.8756297682452857,
+    "validation_accuracy": 0.9251583189407023,
+    "training_samples": 6947,
+    "validation_samples": 1737
+  }
+}

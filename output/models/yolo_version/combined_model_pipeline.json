@@ -1,0 +1,30 @@
+{
+  "format": "ONNX Composite Model",
+  "description": "AI Fitness Mirror - Combined YOLO + Classifier + Correctness",
+  "components": {
+    "yolo_pose": "yolov8n-pose.onnx",
+    "activity_classifier": "activity_classifier.onnx",
+    "correctness_model": "correctness_model.onnx"
+  },
+  "pipeline": [
+    {
+      "step": 1,
+      "model": "yolo_pose",
+      "input": "image (1,3,640,640)",
+      "output": "keypoints (1,51)"
+    },
+    {
+      "step": 2,
+      "model": "activity_classifier",
+      "input": "keypoints",
+      "output": "class_logits (1,6)"
+    },
+    {
+      "step": 3,
+      "model": "correctness_model",
+      "input": "keypoints + class_onehot",
+      "output": "reconstruction_error"
+    }
+  ],
+  "deployment_note": "Load and chain models in ONNX Runtime sequentially"
+}
