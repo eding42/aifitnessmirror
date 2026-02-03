@@ -1,0 +1,31 @@
+{
+  "model_type": "combined_activity_correctness",
+  "input_shape": [
+    1,
+    51
+  ],
+  "input_type": "int8",
+  "output_type": "int8",
+  "outputs": {
+    "activity_probabilities": "Probability distribution over activity classes",
+    "predicted_class": "Index of predicted activity class",
+    "reconstruction_error": "MSE reconstruction error for correctness assessment",
+    "reconstructed_keypoints": "Reconstructed keypoints from autoencoder"
+  },
+  "classes": [
+    "hip thrusts",
+    "jumping jacks",
+    "lunges",
+    "pullups",
+    "pushups",
+    "squats"
+  ],
+  "class_reconstruction_thresholds": {
+    "hip thrusts": 0.007809638536993862,
+    "jumping jacks": 0.008515167286556217,
+    "lunges": 0.008007699021698012,
+    "pullups": 0.009497684269820294,
+    "pushups": 0.008239177502447508,
+    "squats": 0.007587952516468391
+  }
+}
