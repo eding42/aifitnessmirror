@@ -1,0 +1,58 @@
+{
+  "model_type": "Unified End-to-End YOLOv8 Fitness Mirror Model",
+  "framework": "PyTorch + Ultralytics YOLOv8",
+  "yolo_backbone": "YOLOv8 Nano Pose",
+  "classes": [
+    "hip thrusts",
+    "jumping jacks",
+    "lunges",
+    "pullups",
+    "pushups",
+    "squats"
+  ],
+  "num_classes": 6,
+  "input_shape": 51,
+  "num_keypoints": 17,
+  "keypoint_format": "YOLOv8 Pose (17 keypoints, normalized)",
+  "class_reconstruction_errors": {
+    "hip thrusts": {
+      "mean": 0.006185310427099466,
+      "std": 0.004979824647307396,
+      "threshold": 0.01614495925605297
+    },
+    "jumping jacks": {
+      "mean": 0.0050268275663256645,
+      "std": 0.009478741325438023,
+      "threshold": 0.023984309285879135
+    },
+    "lunges": {
+      "mean": 0.00560745969414711,
+      "std": 0.00872329156845808,
+      "threshold": 0.02305404283106327
+    },
+    "pullups": {
+      "mean": 0.008610446937382221,
+      "std": 0.0073754205368459225,
+      "threshold": 0.023361288011074066
+    },
+    "pushups": {
+      "mean": 0.007354657631367445,
+      "std": 0.007145809940993786,
+      "threshold": 0.021646277979016304
+    },
+    "squats": {
+      "mean": 0.004461661912500858,
+      "std": 0.004005542956292629,
+      "threshold": 0.012472747825086117
+    }
+  },
+  "model_inputs": {
+    "images": "(batch_size, 3, H, W) - RGB images, typical size 640x640"
+  },
+  "model_outputs": {
+    "keypoints": "(batch_size, 51) - Flattened pose keypoints [x1,y1,c1,...]",
+    "activity_logits": "(batch_size, 6) - Activity classification logits"
+  },
+  "usage": "Single model for complete pipeline: Image \u2192 Keypoints + Activity + Form Quality",
+  "deployment_notes": "Use PyTorch model for deployment. Load YOLOv8 and custom heads separately."
+}
