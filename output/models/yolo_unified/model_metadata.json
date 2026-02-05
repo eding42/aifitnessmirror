@@ -1,7 +1,6 @@
 {
-  "model_type": "Unified End-to-End YOLOv8 Fitness Mirror Model",
-  "framework": "PyTorch + Ultralytics YOLOv8",
-  "yolo_backbone": "YOLOv8 Nano Pose",
+  "model_type": "YOLOv8 pose + keypoint heads",
+  "yolo_backbone": "yolov8n-pose.pt",
   "classes": [
     "hip thrusts",
     "jumping jacks",
@@ -13,46 +12,39 @@
   "num_classes": 6,
   "input_shape": 51,
   "num_keypoints": 17,
-  "keypoint_format": "YOLOv8 Pose (17 keypoints, normalized)",
+  "keypoint_format": "17 keypoints, normalized x/y, confidence",
   "class_reconstruction_errors": {
-    "hip thrusts": {
-      "mean": 0.006185310427099466,
-      "std": 0.004979824647307396,
-      "threshold": 0.01614495925605297
+    "0": {
+      "mean": 0.00516590615734458,
+      "std": 0.006544250063598156,
+      "threshold": 0.01825440675020218
     },
-    "jumping jacks": {
-      "mean": 0.0050268275663256645,
-      "std": 0.009478741325438023,
-      "threshold": 0.023984309285879135
+    "1": {
+      "mean": 0.0032394747249782085,
+      "std": 0.0037333581130951643,
+      "threshold": 0.010706190951168537
     },
-    "lunges": {
-      "mean": 0.00560745969414711,
-      "std": 0.00872329156845808,
-      "threshold": 0.02305404283106327
+    "2": {
+      "mean": 0.0033100852742791176,
+      "std": 0.0027168390806764364,
+      "threshold": 0.008743762969970703
     },
-    "pullups": {
-      "mean": 0.008610446937382221,
-      "std": 0.0073754205368459225,
-      "threshold": 0.023361288011074066
+    "3": {
+      "mean": 0.005209590308368206,
+      "std": 0.004546416457742453,
+      "threshold": 0.014302423223853111
     },
-    "pushups": {
-      "mean": 0.007354657631367445,
-      "std": 0.007145809940993786,
-      "threshold": 0.021646277979016304
+    "4": {
+      "mean": 0.005809652619063854,
+      "std": 0.007465781643986702,
+      "threshold": 0.020741216838359833
     },
-    "squats": {
-      "mean": 0.004461661912500858,
-      "std": 0.004005542956292629,
-      "threshold": 0.012472747825086117
+    "5": {
+      "mean": 0.0029135895892977715,
+      "std": 0.0023217101115733385,
+      "threshold": 0.0075570098124444485
     }
   },
-  "model_inputs": {
-    "images": "(batch_size, 3, H, W) - RGB images, typical size 640x640"
-  },
-  "model_outputs": {
-    "keypoints": "(batch_size, 51) - Flattened pose keypoints [x1,y1,c1,...]",
-    "activity_logits": "(batch_size, 6) - Activity classification logits"
-  },
-  "usage": "Single model for complete pipeline: Image \u2192 Keypoints + Activity + Form Quality",
-  "deployment_notes": "Use PyTorch model for deployment. Load YOLOv8 and custom heads separately."
+  "created_at": "2026-02-04T12:51:06.792992",
+  "notes": "Heads trained on per-frame keypoints. For best generalization, split/train per-video and/or use temporal windows."
 }
